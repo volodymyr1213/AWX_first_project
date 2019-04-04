@@ -1,0 +1,29 @@
+---
+- name:  Create all users to remote system
+  hosts: all
+  become: yes
+  become_method: sudo
+  vars:
+    all_users:
+      - { name: 'madina',  key : "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEE8SYraT8/AHBnYQsEVNtcLVbFkh88INOsd44IK76oTNJ6qqWn1Y41NTrR75x7ow9J+S6P9V1Gl49EdKUxwlV3LjoM3nTeL27y9IGbhOupBXdntkKy1YHTRdIisdG0T6EOIks/Pcl9zVgWUm26aQXwd+2JQ69YeyTgdYkbf8dIuZGxeg2PXcpbevpSRr40nCYw3ZLS2krVstXlDGLnXvvFIUrfdog4YhdqfJ1E//UuSb91SxR/Dq6LshgW44Tm/YRQC/EURRP6wy7Ko2Y7BG7s2Ix/wCmQh1GihXwPsVxHs24hwDKvV7wBVZsbvk0LkGwR0CvsVnoCyWWtFW6w+HP" }
+      - { name: 'farkhod', key : "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHThalyM3uM5TWKttnQUL3eRfEOK4TnFkuHlIL7UXNn34PwnPYULJukewmzk4IE+PNl/flS+PC6SJyQ3zcYUufDRZihvOvkvuTEHCNoN5fkKPASCRiwIyXZoYKGxFG6r0r9bsDtleuVL94Li9fhi5QOakUHwC74+GxoFKYBXvybdDIuCV1F2PQ38wkdDUTCoRxX1P8yTzSeN9VSIROxYrR7DdQw5dd1sVfOJgO0QckFSXoBIv09f66zBQE9D6AbQwi63EPfYInMTxLgHagraRROnYx0IezwQUrd2X/OQEpqGu7/rAIiqru0V4+JKDoPD0Ydl1c0OzTJELY8ZxIX1zh fsadykov@Fs-MacBook-Pro.local" }
+      - { name: 'abdul', key : "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkVmYxQjVLe8bHrfExUK9nEaYEoXVnkJCowQQOSdhSUud8iFfcXPv4ecoNcACss6zefgfWUcTKmk/e8IptZx8MJm5PqNynivMjYLYZyV8Pxi1Z/w0fIlisFKpnFNCgel5JEKJzosOqn0NIYAvhBDdxaolx/Lnear1ZIIbAgxKmGUdyPGS3G65/X9ssybjeiYqBlj+FU1BaWGMmeCXLLikd5DMfjJKmSqqYhVVH96GABpQTjCkT+pOklW3HR0Ajp55igecdxN+e3H1g/KLMAG2ydBmtf+apgCDC/mBZE9QDCAG5TT6CT4a72JKNF9uRtQJM0kYvW7oM+iUDdkJfSxTf abdugofir@Abdugofirs-MacBook-Pro.local" }
+
+
+  tasks:
+    - name: Add list of users to remote system
+      user:
+        generate_ssh_key: yes
+        name: "{{ item.name }}"
+        state: present
+        groups: "wheel"
+      with_items:
+        - "{{ all_users }}"
+
+    - name: Copy the public key to each users
+      authorized_key:
+        user: "{{ item.name }}"
+        state: present
+        key: "{{ item.key }}"
+      with_items:
+        - "{{ all_users }}"
