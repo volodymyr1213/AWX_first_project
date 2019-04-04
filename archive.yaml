@@ -1,10 +1,10 @@
-- name: Compress regular file /tmp/ to t/tmp/myfolder/zoo.gz and remote it 
+- name: Compress regular file /tmp/ to t/tmp/zoo.gz 
   archive:
-    path: /tmp/myfolder
+    path: /tmp
     age: 90d
     remote: yes 
 
  - name: Remove previous file
    file:
-     path: /tmp/myfolder/zoo.gz
+     path: /tmp/zoo.gz
      state: present  
