@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: Centos
   become: true
   become_method: sudo 
   tasks:
