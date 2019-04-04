@@ -1,5 +1,5 @@
 ---
-- hosts: Centos
+- hosts: all
   become: true
   become_method: sudo 
   tasks:
@@ -7,4 +7,4 @@
     apt: 
       name: ['python-pip', 'git', 'apache2' , 'tree'] 
       state: latest
-    when: ansible_distribution == 'Centos' 
+    when: ansible_distribution == 'Ubuntu' 
